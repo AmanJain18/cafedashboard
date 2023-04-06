@@ -10,13 +10,21 @@ import {
   ErrorComponent,
 } from "@pankod/refine-mui";
 
+import {
+  RestaurantMenuOutlined,
+  PeopleAltOutlined,
+  ShoppingCartOutlined,
+  StackedLineChartOutlined,
+  AccountCircleOutlined
+} from '@mui/icons-material'
+
 import dataProvider from "@pankod/refine-simple-rest";
 import { MuiInferencer } from "@pankod/refine-inferencer/mui";
 import routerProvider from "@pankod/refine-react-router-v6";
 import axios, { AxiosRequestConfig } from "axios";
 import { ColorModeContextProvider } from "contexts";
 import { Title, Sider, Layout, Header } from "components/layout";
-import { Login } from "pages/login";
+import { Login, Home, MyProfile, ItemDetails, AllItems, AddItem, EditItem, Users } from "pages";
 import { CredentialResponse } from "interfaces/google";
 import { parseJwt } from "utils/parse-jwt";
 
@@ -88,7 +96,7 @@ function App() {
 
   return (
     <>
-      <GitHubBanner />
+      {/* <GitHubBanner /> */}
       <ColorModeContextProvider>
         <CssBaseline />
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
@@ -100,12 +108,35 @@ function App() {
             catchAll={<ErrorComponent />}
             resources={[
               {
-                name: "posts",
-                list: MuiInferencer,
-                edit: MuiInferencer,
-                show: MuiInferencer,
-                create: MuiInferencer,
-                canDelete: true,
+                name: "orders",
+                list: Home,
+                icon: <ShoppingCartOutlined />,
+              },
+              {
+                name: "menus",
+                list: AllItems,
+                show: ItemDetails,
+                create: AddItem,
+                edit: EditItem,
+                icon: <RestaurantMenuOutlined />,
+              },
+              {
+                name: "users",
+                list: Home,
+                icon: <PeopleAltOutlined />,
+              },
+              {
+                name: "sales",
+                list: Home,
+                icon: <StackedLineChartOutlined />,
+              },
+              {
+                name: "my-profile",
+                options: {
+                  label: "My Profile",
+                }, // <--- this is the label that will be displayed in the menu  (default: resource name)
+                list: MyProfile,
+                icon: <AccountCircleOutlined />,
               },
             ]}
             Title={Title}
@@ -115,6 +146,7 @@ function App() {
             routerProvider={routerProvider}
             authProvider={authProvider}
             LoginPage={Login}
+            DashboardPage={Home}
           />
         </RefineSnackbarProvider>
       </ColorModeContextProvider>
